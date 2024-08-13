@@ -17,7 +17,7 @@ export default function StoreBody({ products }) {
                   />
                 </div>
                 <p className="font-bold font-mono">{item.title}</p>
-                <p>{item.price}</p>
+                <p>${item.price.toFixed(2)}</p>
                 <p>⭐{item.rating.rate}</p>
               </div>
             </Link>

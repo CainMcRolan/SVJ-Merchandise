@@ -1,5 +1,6 @@
 import NavBar from "./components/navbar";
 import HomeBody from "./components/homeComponents/homeBody";
+import { useEffect } from "react";
 
 function Home() {
   return (

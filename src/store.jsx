@@ -8,9 +8,7 @@ export default function Store() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let response = await fetch(
-          "https://fakestoreapi.com/products?limit=20"
-        );
+        let response = await fetch("https://fakestoreapi.com/products");
         let data = await response.json();
         if (data) setProducts(data);
       } catch (err) {
@@ -19,6 +17,14 @@ export default function Store() {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    document.title = "STORE || MERCHANDISE COLLECTION";
+
+    return () => {
+      document.title = "SVJ Merchandise";
+    };
   }, []);
 
   return (
