@@ -12,7 +12,7 @@ export default function CartBody() {
 
       if (productIndex !== -1) {
         return prevCart.map((item, index) =>
-          index === productIndex ? { ...item, count: item.count++ } : item
+          index === productIndex ? { ...item, count: item.count + 1 } : item
         );
       }
     });
@@ -28,7 +28,7 @@ export default function CartBody() {
         return prevCart.map((item, index) => {
           if (item.count > 1) {
             return index === productIndex
-              ? { ...item, count: item.count-- }
+              ? { ...item, count: item.count - 1 }
               : item;
           }
 
