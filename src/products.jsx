@@ -1,9 +1,11 @@
 import { useParams } from "react-router-dom";
-import NavBar from "../navbar";
+import NavBar from "./components/navbar";
 import { useState, useEffect } from "react";
 import { BeatLoader } from "react-spinners";
+import { useCart } from "./context/cartContext";
 
 export default function Products() {
+  const cart = useCart();
   let { productId } = useParams();
   const [currentProduct, setCurrentProduct] = useState(null);
   const [productCount, setProductCount] = useState(1);
@@ -38,16 +40,44 @@ export default function Products() {
     setProductCount(1);
   }, [productId]);
 
+  //Handle Product Counts
+
   const handleProductCount = (e) => {
     setProductCount(e.target.value);
   };
 
   const incrementProductCount = () => {
-    setProductCount((prevCount) => prevCount + 1);
+    setProductCount((prevCount) => {
+      if (prevCount < 50) return prevCount + 1;
+      return prevCount; // Keeps the count at 50
+    });
   };
 
   const decrementProductCount = () => {
-    setProductCount((prevCount) => prevCount - 1);
+    setProductCount((prevCount) => {
+      if (prevCount > 1) return prevCount - 1;
+      return prevCount; // Keeps the count at 1
+    });
+  };
+
+  //Handle Cart Things
+  const addToCart = (count) => {
+    count = parseInt(count);
+    if (count > 0 && count <= 50) {
+      cart.setCart((prevCart) => {
+        const itemIndex = prevCart.findIndex(
+          (item) => item.id === currentProduct.id
+        );
+
+        if (itemIndex !== -1) {
+          return prevCart.map((item, index) =>
+            index === itemIndex ? { ...item, count: item.count + count } : item
+          );
+        } else {
+          return [...prevCart, { ...currentProduct, count: count }];
+        }
+      });
+    }
   };
 
   return (
@@ -95,7 +125,10 @@ export default function Products() {
                   +
                 </button>
               </div>
-              <button className="text-white bg-blue-700 hover:bg-blue-800 hover:ring-2 focus:ring-blue-300 font-bold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+              <button
+                onClick={() => addToCart(productCount)}
+                className="text-white bg-blue-700 hover:bg-blue-800 hover:ring-2 focus:ring-blue-300 font-bold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
                 🛒Add to Cart
               </button>
             </div>
